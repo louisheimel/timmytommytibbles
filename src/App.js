@@ -22,7 +22,6 @@ class MrsTibble extends Component {
   state = {messageToTommy: ''};
 
   walkieTalkie = message => {
-    console.log(message);
     this.setState({messageToTommy: message});
   };
 
