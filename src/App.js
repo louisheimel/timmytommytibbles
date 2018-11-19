@@ -1,28 +1,39 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
+class Timmy extends Component {
+  sendMessage = e => {
+    this.props.walkieTalkie(e.target.value);
+  };
+
+  render() {
+    return <input onChange={this.sendMessage} />;
+  }
+}
+
+class Tommy extends Component {
+  render() {
+    return <p>I heard Timmy's message: "{this.props.messageFromTimmy}"</p>;
+  }
+}
+
+class MrsTibble extends Component {
+  state = {messageToTommy: ''};
+
+  walkieTalkie = message => {
+    console.log(message);
+    this.setState({messageToTommy: message});
+  };
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Timmy walkieTalkie={this.walkieTalkie} />
+        <Tommy messageFromTimmy={this.state.messageToTommy} />
       </div>
     );
   }
 }
 
-export default App;
+export default MrsTibble;

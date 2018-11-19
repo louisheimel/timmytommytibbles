@@ -1,44 +1,57 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Lifting State Up
+Timmy and Tommy Tibbles are two young brothers who are fighting with each other.  Mrs. Tibbles put Timmy and Tommy in time-out chairs in opposite sides of the house.  Timmy wants to talk to Tommy, but Mrs. Tibbles says he needs to calm down and sit in his time-out chair.  
 
-## Available Scripts
+Mrs. Tibbles tells Timmy that neither he nor Tommy are allowed to talk to each other directly.  Tommy and Timmy are also disallowed from speaking to Mrs. Tibbles directly.  However, Mrs. Tibbles gives Timmy a walkie talkie which he can use to talk to Mrs. Tibbles, who may or may not decide to pass the message on to Tommy on Timmy's behalf.
 
-In the project directory, you can run:
+This is an analogy for following React application:
 
-### `npm start`
+```
+class Timmy extends Component {                                                         
+  sendMessage = e => {                                                                  
+    this.props.walkieTalkie(e.target.value);                                            
+  };                                                                                    
+                                                                                        
+  render() {                                                                            
+    return <input onChange={this.sendMessage} />;                                       
+  }                                                                                     
+}                                                                                       
+                                                                                        
+class Tommy extends Component {                                                         
+  render() {                                                                            
+    return (                                                                            
+      <p>Hey Timmy, I heard your message: "{this.props.messageFromTimmy}"</p>           
+    );                                                                                  
+  }                                                                                     
+}                                                                                       
+                                                                                        
+class MrsTibble extends Component {                                                     
+  state = {messageToTommy: ''};                                                         
+  walkieTalkie = message => {                                                           
+    console.log(message);                                                               
+    this.setState({messageToTommy: message});                                           
+  };                                                                                    
+  render() {                                                                            
+    return (                                                                            
+      <div className="App">                                                             
+        <Timmy walkieTalkie={this.walkieTalkie} />                                      
+        <Tommy messageFromTimmy={this.state.messageToTommy} />                          
+      </div>                                                                            
+    );                                                                                  
+  }                                                                                     
+}  
+```
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Timmy and Tommy Tibbles are two young brothers who are fighting with each other.  Mrs. Tibbles put Timmy and Tommy in time-out chairs in opposite sides of the house.  Timmy wants to talk to Tommy, but Mrs. Tibbles says he needs to calm down and sit in his time-out chair.  
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Mrs. Tibbles tells Timmy that neither he nor Tommy are allowed to talk to each other face to face.  Tommy and Timmy are also disallowed from talking to Mrs. Tibbles face to face.
 
-### `npm test`
+**"talking face to face" in this example is equivalent to "passing props" from component to component in a React application.  Props can only be passed from a *Parent* component to a *Child* component.**
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+However, Mrs. Tibbles gives Timmy a walkie talkie which he can use to talk to Mrs. Tibbles, who may or may not decide to pass the message on to Tommy on Timmy's behalf.
 
-### `npm run build`
+**A *Parent* component can pass *functions* to it's children as props.  This allows communication between a child component and it's parent.  It can also allow a child component to indirectly change the state of it's parent.**
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+For more on this, check out the React documentation: [https://reactjs.org/docs/lifting-state-up.html](https://reactjs.org/docs/lifting-state-up.html)
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Bonus: Here's another example of the same concept:
+[https://github.com/louisheimel/lifting-state-up](https://github.com/louisheimel/lifting-state-up)
